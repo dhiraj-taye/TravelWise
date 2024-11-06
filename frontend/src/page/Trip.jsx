@@ -25,7 +25,7 @@ const Trip = () => {
       setTripPlan(response.data);
       setError("");
     } catch (error) {
-      setError(error.response?.data?.error || "Something went wrong");
+      setError(error.response?.data?.error || "Something went wrong! Try again");
     } finally {
       setLoading(false);
     }
