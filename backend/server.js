@@ -11,29 +11,26 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const MONGO = process.env.MONGODB_URI
+// MongoDB Connection
+const connectDB = async () => {
+
+  mongoose.connection.on("connected", () => console.log("Database Connected"));
+  
+  await mongoose.connect(`${process.env.MONGODB_URL}`);
+};
+
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+connectDB();
 
-// MongoDB Connection
-mongoose.connect(MONGO, {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
-  // useCreateIndex: true,
-})
-.then(() => {
-  console.log('MongoDB connected');
-})
-.catch((error) => {
-  console.error('MongoDB connection error:', error.message);
-  process.exit(1);
-});
 
 // Routes
-app.use('/api/trip', tripRoutes);
+app.use("/api/trip", tripRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+app.get("/", (req, res) => {
+  res.send("API working");
 });
+
+app.listen(PORT, () => console.log("server started", PORT));
